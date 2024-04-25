@@ -1,4 +1,6 @@
 import os
+import tkinter as tk
+from tkinter import messagebox
 
 def search_word_in_files(word, folder):
     books_with_word = {}
@@ -12,16 +14,34 @@ def search_word_in_files(word, folder):
                     books_with_word[file] = occurrences
     return books_with_word
 
-def main():
-    word_to_search = input("Enter the word you want to search for: ")
-    data_folder = "Data"
-    results = search_word_in_files(word_to_search, data_folder)
+def search_word():
+    word_to_search = entry_word.get()
+    results = search_word_in_files(word_to_search, "Data")
     if results:
-        print(f"The word '{word_to_search}' is found in the following books:")
+        result_str = f"The word '{word_to_search}' is found in the following books:\n"
         for book, occurrences in results.items():
-            print(f"- {book}: {occurrences} times")
+            result_str += f"- {book}: {occurrences} times\n"
+        messagebox.showinfo("Search Results", result_str)
     else:
-        print(f"The word '{word_to_search}' was not found in any of the books.")
+        messagebox.showinfo("Search Results", f"The word '{word_to_search}' was not found in any of the books.")
 
-if __name__ == "__main__":
-    main()
+# Create GUI
+root = tk.Tk()
+root.title("Word Search")
+
+bg_color = "#f0f0f0"
+fg_color = "#333333"
+font_style = ("Helvetica", 12)
+
+root.configure(bg=bg_color)
+
+label_word = tk.Label(root, text="Enter the word you want to search for:", bg=bg_color, fg=fg_color, font=font_style)
+label_word.pack()
+
+entry_word = tk.Entry(root, font=font_style)
+entry_word.pack()
+
+button_search = tk.Button(root, text="Search", command=search_word, bg="#4CAF50", fg="white", font=font_style)
+button_search.pack(pady=10)
+
+root.mainloop()
